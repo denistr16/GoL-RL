@@ -5,7 +5,7 @@
 Project's description here soon.
 
 ### Modules structure
-#### evns
+#### evn
 #### loss
 #### model
 #### patterns
