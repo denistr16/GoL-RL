@@ -1,15 +1,15 @@
 import torch
 
 
-class RandomObserever(torch.nn.Module):
+class LinearObserever(torch.nn.Module):
 
-    def __init__(self, name, grid_size=100, window_size=10):
+    def __init__(self, name, grid_size: tuple, window_size: int):
         super().__init__()
         self.name = name
-        self.grid_size = (grid_size, grid_size)
+        self.grid_size = grid_size
         self.window_size = (window_size, window_size)
         self.model = torch.nn.Sequential(
-            torch.nn.Linear(grid_size * grid_size, 2),
+            torch.nn.Linear(grid_size[0] * grid_size[1], 2),
             torch.nn.ReLU())
 
     def forward(self, observations):
@@ -19,8 +19,8 @@ class RandomObserever(torch.nn.Module):
         return x, y
 
 
-class RandomPlanter(torch.nn.Module):
-    def __init__(self, name, window_size=10):
+class LinearPlanter(torch.nn.Module):
+    def __init__(self, name, window_size: int):
         super().__init__()
         self.name = name
         self.window_size = window_size
@@ -34,15 +34,15 @@ class RandomPlanter(torch.nn.Module):
         return new_points.view(observations.shape[0], observations.shape[1])
 
 
-class MemoryAgentModel(torch.nn.Module):
-    def __init__(self, grid_size=100, window_size=10):
+class LinearPlanterObserver(torch.nn.Module):
+    def __init__(self, grid_size: tuple, window_size: int):
         super().__init__()
         self.grid_size = grid_size
         self.window_size = window_size
 
-        self.memoized_env = torch.nn.Parameter(torch.ones(grid_size, grid_size), requires_grad=False)
-        self.planter = RandomPlanter("Sam", window_size)
-        self.observer = RandomObserever("Mike", grid_size, window_size)
+        self.memoized_env = torch.nn.Parameter(torch.zeros(grid_size[0], grid_size[1]), requires_grad=False)
+        self.planter = LinearPlanter("Sam", window_size)
+        self.observer = LinearObserever("Mike", grid_size, window_size)
 
     def forward(self, env):
         x, y = self.observer.forward(env)
@@ -53,4 +53,5 @@ class MemoryAgentModel(torch.nn.Module):
         perception_field = self.planter.forward(env[x0:x1, y0:y1])
         memoized_env = env * self.memoized_env
         memoized_env[x0:x1, y0:y1] = perception_field
+
         return memoized_env, perception_field, x0, y0

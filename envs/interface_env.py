@@ -1,16 +1,6 @@
 from abc import ABCMeta, abstractmethod
 
 
-# This call will fail with an exception
-# try:
-#     x = MyClient(MyBadServer)
-# except Exception as exc:
-#     print 'Failed as it should!'
-#
-# # This will pass with glory
-# MyClient(MyServer()).client_show()
-
-
 class IEnv:
     __metaclass__ = ABCMeta
 
