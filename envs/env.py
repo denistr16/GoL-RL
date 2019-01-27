@@ -22,8 +22,10 @@ class Env:
                     # so that the simulaton takes place on a toroidal surface.
                     total = int((self.grid[i, (j - 1) % g_len] + self.grid[i, (j + 1) % g_len] +
                                  self.grid[(i - 1) % g_len, j] + self.grid[(i + 1) % g_len, j] +
-                                 self.grid[(i - 1) % g_len, (j - 1) % g_len] + self.grid[(i - 1) % g_len, (j + 1) % g_len] +
-                                 self.grid[(i + 1) % g_len, (j - 1) % g_len] + self.grid[(i + 1) % g_len, (j + 1) % g_len])
+                                 self.grid[(i - 1) % g_len, (j - 1) % g_len] +
+                                 self.grid[(i - 1) % g_len, (j + 1) % g_len] +
+                                 self.grid[(i + 1) % g_len, (j - 1) % g_len] +
+                                 self.grid[(i + 1) % g_len, (j + 1) % g_len])
                                 / self.__alive_cell)
 
                     # apply Conway's rules
@@ -48,9 +50,7 @@ class Env:
         self.grid[x: x + block_shape[0], y: y + block_shape[1]] = block
 
     def step(self, perception_field: torch.tensor, field_position_x: int, field_position_y: int, n_steps=1):
-        block = perception_field.numpy()
-
-        self.insert_block_into_grid(block=block, x=field_position_x, y=field_position_y)
+        self.insert_block_into_grid(block=perception_field.numpy(), x=field_position_x, y=field_position_y)
         self.grid_update(n_steps=n_steps)
 
         return {"grid": self.grid}
