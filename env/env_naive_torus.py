@@ -27,8 +27,8 @@ class NaiveSandbox(IEnv):
                 for j in range(g_len):
 
                     # compute the 8-neighbor sum
-                    # using sphere boundary conditions - x and y wrap around
-                    # so that the simulation takes place on a spherical surface.
+                    # using toroidal boundary conditions - x and y wrap around
+                    # so that the simulation takes place on a torus's surface.
                     total = int((self.__grid[i, (j - 1) % g_len] + self.__grid[i, (j + 1) % g_len] +
                                  self.__grid[(i - 1) % g_len, j] + self.__grid[(i + 1) % g_len, j] +
                                  self.__grid[(i - 1) % g_len, (j - 1) % g_len] +
