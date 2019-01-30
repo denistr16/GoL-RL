@@ -47,11 +47,14 @@ class NaiveSandbox(IEnv):
 
             self.__grid[:] = new_grid[:]
 
-    def forward(self, inserted_block, inserted_block_position_x0: int, inserted_block_position_y0: int, n_steps=1):
+    def forward(self, inserted_block, inserted_block_position_x0: int, inserted_block_position_y0: int, reward_fn,
+                n_steps=1):
         self.insert_block(block=inserted_block.numpy(), x0=inserted_block_position_x0, y0=inserted_block_position_y0)
         self.step(n_steps=n_steps)
+        reward_value = reward_fn(self.__grid)
 
-        return self.__grid
+        env_state = {"reward": reward_value, "grid": self.__grid}
+        return env_state
 
     def get_grid(self):
         return self.__grid
