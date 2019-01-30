@@ -14,5 +14,6 @@ class IEnv:
     def step(self, n_steps=1): raise NotImplementedError
 
     @abstractmethod
-    def forward(self, inserted_block, inserted_block_position_x0: int, inserted_block_position_y0: int, n_steps=1):
+    def forward(self, inserted_block, inserted_block_position_x0: int, inserted_block_position_y0: int, reward_fn,
+                n_steps=1):
         raise NotImplementedError
