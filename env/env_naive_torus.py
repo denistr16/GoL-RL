@@ -1,12 +1,20 @@
-from .interface_env import IEnv
 import numpy as np
+
+from reward.rewards import *
+from .interface_env import IEnv
+
+template_rewards = {
+    "alive_cells": AliveCellsReward()
+}
 
 
 class NaiveSandbox(IEnv):
-    def __init__(self, grid_size):
+    def __init__(self, grid_size, n_iterations=None):
         self.__dead_cell = 0
         self.__alive_cell = 1
         self.__grid = np.full(grid_size, self.__dead_cell)
+        self.__n_iterations = n_iterations
+        self.__current_iteration = 0
 
     def insert_block(self, block, x0, y0):
         block_shape = block.shape
@@ -46,14 +54,23 @@ class NaiveSandbox(IEnv):
                             new_grid[i, j] = self.__alive_cell
 
             self.__grid[:] = new_grid[:]
+            self.__current_iteration += 1
 
-    def forward(self, inserted_block, inserted_block_position_x0: int, inserted_block_position_y0: int, reward_fn,
-                n_steps=1):
+    def is_done(self):
+        if self.__n_iterations is None:
+            return False
+        elif self.__current_iteration >= self.__n_iterations:
+            return True
+        else:
+            return False
+
+    def forward(self, inserted_block, inserted_block_position_x0: int, inserted_block_position_y0: int,
+                reward_fn=template_rewards['alive_cells'], n_steps=1):
         self.insert_block(block=inserted_block.numpy(), x0=inserted_block_position_x0, y0=inserted_block_position_y0)
         self.step(n_steps=n_steps)
         reward_value = reward_fn(self.__grid)
-
-        env_state = {"reward": reward_value, "grid": self.__grid}
+        is_done = self.is_done()
+        env_state = {"reward": reward_value, "grid": self.__grid, 'done': is_done}
         return env_state
 
     def get_grid(self):
