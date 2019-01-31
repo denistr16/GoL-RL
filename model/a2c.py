@@ -13,7 +13,7 @@ class ActorCritic(nn.Module):
     def __init__(self, n_inputs, n_actions):
         super().__init__()
         self.n_inputs = n_inputs
-
+        self.n_actions = n_actions
         self.linear1 = nn.Linear(n_inputs, 64)
         self.linear2 = nn.Linear(64, 128)
         self.linear3 = nn.Linear(128, 64)
@@ -47,8 +47,7 @@ class ActorCritic(nn.Module):
     # Both heads
     def evaluate_actions(self, x):
         x = self(x)
-        actor_probs = self.actor(x)
-        action_probs = torch.sigmoid(x)
+        action_probs = torch.sigmoid(self.actor(x))
         state_values = self.critic(x)
         return action_probs, state_values
 
@@ -89,8 +88,7 @@ class ActorCritic(nn.Module):
         s = torch.FloatTensor(states)
         action_probs, state_values_est = self.evaluate_actions(s)
         action_log_probs = action_probs.log()
-
-        a = torch.LongTensor(actions).view(-1,1)
+        a = torch.LongTensor(actions).view(-1, self.n_actions)
         chosen_action_log_probs = action_log_probs.gather(1, a)
 
         # This is also the TD error
