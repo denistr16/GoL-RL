@@ -1,8 +1,4 @@
-import numpy as np
-import torch
-
 class AliveCellsReward:
-
     def __call__(self, env):
         return self.forward(env)
 
