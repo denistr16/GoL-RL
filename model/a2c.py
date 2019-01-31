@@ -12,14 +12,13 @@ GAMMA = 0.8
 class ActorCritic(nn.Module):
     def __init__(self, n_inputs, n_actions):
         super().__init__()
-        self.n_actions = n_actions
         self.n_inputs = n_inputs
 
         self.linear1 = nn.Linear(n_inputs, 64)
         self.linear2 = nn.Linear(64, 128)
         self.linear3 = nn.Linear(128, 64)
 
-        self.actor = nn.Linear(64, n_actions*n_inputs)
+        self.actor = nn.Linear(64, n_inputs)
         self.critic = nn.Linear(64, 1)
 
     # In a PyTorch model, you only have to define the forward pass. PyTorch computes the backwards pass for you!
@@ -35,8 +34,8 @@ class ActorCritic(nn.Module):
     # Only the Actor head
     def get_action_probs(self, x):
         x = self(x)
-        x = self.actor(x).view(self.n_inputs, self.n_actions)
-        action_probs = F.softmax(x, 0)
+        x = self.actor(x)
+        action_probs = torch.sigmoid(x)
         return action_probs
 
     # Only the Critic head
@@ -48,8 +47,8 @@ class ActorCritic(nn.Module):
     # Both heads
     def evaluate_actions(self, x):
         x = self(x)
-        actor_probs = self.actor(x).view(self.n_inputs, self.n_actions)
-        action_probs = F.softmax(x, 0)
+        actor_probs = self.actor(x)
+        action_probs = torch.sigmoid(x)
         state_values = self.critic(x)
         return action_probs, state_values
 
