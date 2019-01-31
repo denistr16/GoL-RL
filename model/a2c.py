@@ -52,7 +52,7 @@ class ActorCritic(nn.Module):
         rewards.reverse()
 
         # If we happen to end the set on a terminal state, set next return to zero
-        if dones[-1] == True:
+        if dones[-1]:
             next_return = 0
 
         # If not terminal state, bootstrap v(s) using our critic
