@@ -1,14 +1,10 @@
-import gym
-import os
-import numpy as np
-import matplotlib.pyplot as plt
-
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-import torch.optim as optim
-import torch.autograd as autograd
+
 GAMMA = 0.8
+
+
 class ActorCritic(nn.Module):
     def __init__(self, n_inputs, n_actions):
         super().__init__()
@@ -51,13 +47,13 @@ class ActorCritic(nn.Module):
         state_values = self.critic(x)
         return action_probs, state_values
 
-
     def calc_actual_state_values(self, rewards, dones, states):
         R = []
         rewards.reverse()
 
         # If we happen to end the set on a terminal state, set next return to zero
-        if dones[-1] == True: next_return = 0
+        if dones[-1]:
+            next_return = 0
 
         # If not terminal state, bootstrap v(s) using our critic
         # TODO: don't need to estimate again, just take from last value of v(s) estimates
@@ -69,8 +65,10 @@ class ActorCritic(nn.Module):
         R.append(next_return)
         dones.reverse()
         for r in range(1, len(rewards)):
-            if not dones[r]: this_return = rewards[r] + next_return * GAMMA
-            else: this_return = 0
+            if not dones[r]:
+                this_return = rewards[r] + next_return * GAMMA
+            else:
+                this_return = 0
             R.append(this_return)
             next_return = this_return
 
@@ -78,7 +76,6 @@ class ActorCritic(nn.Module):
         state_values_true = torch.FloatTensor(R).unsqueeze(1)
 
         return state_values_true
-
 
     def reflect(self, states, actions, rewards, dones):
 
@@ -97,7 +94,6 @@ class ActorCritic(nn.Module):
         entropy = (action_probs * action_log_probs).sum(1).mean()
         action_gain = (chosen_action_log_probs * advantages).mean()
         value_loss = advantages.pow(2).mean()
-        total_loss = value_loss - action_gain - 0.0001*entropy
-
+        total_loss = value_loss - action_gain - 0.0001 * entropy
 
         return total_loss
