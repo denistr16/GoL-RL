@@ -1,10 +1,10 @@
 import tkinter as Tkinter
 from PIL import Image, ImageTk
 import numpy as np
-from env.env_naive_torus import NaiveSandbox
+from env.env_2players_naive_torus import NaiveSandbox, players_cells_values, dead_cell
 
-env = NaiveSandbox((20, 20))
-# test_array = env.get_grid()
+env = NaiveSandbox((30, 30))
+
 H, W = 1000, 1000
 
 
@@ -35,7 +35,7 @@ class GameOfLife():
         def to_colors(x):
             if x == 0:
                 return 0
-            elif x == 1:
+            elif x == players_cells_values['player_1']:
                 return 255
             else:
                 return 125
@@ -58,20 +58,20 @@ class GameOfLife():
         grid = self.env.get_grid()
         y, x = get_cell_id(event.x, event.y, grid)
 
-        if grid[x][y] == 1:
-            grid[x][y] = 0
-        elif grid[x][y] == 0:
-            grid[x][y] = 1
+        if grid[x][y] == players_cells_values['player_1']:
+            grid[x][y] = dead_cell
+        elif grid[x][y] == dead_cell:
+            grid[x][y] = players_cells_values['player_1']
         self.draw_matrix()
 
     def click_player_two(self, event):
         grid = self.env.get_grid()
         y, x = get_cell_id(event.x, event.y, grid)
 
-        if grid[x][y] == 2:
-            grid[x][y] = 0
-        elif grid[x][y] == 0:
-            grid[x][y] = 2
+        if grid[x][y] == players_cells_values['player_2']:
+            grid[x][y] = dead_cell
+        elif grid[x][y] == dead_cell:
+            grid[x][y] = players_cells_values['player_2']
         self.draw_matrix()
 
 
