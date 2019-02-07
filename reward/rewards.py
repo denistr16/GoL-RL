@@ -12,8 +12,6 @@ class MultipleAgentsCellsReward:
 
     def forward(self, env):
         env = env.flatten()
-        cell_count = np.bincount(env)
+        cell_count = np.bincount(env,minlength=3)
         rewards = [i / sum(cell_count) for i in cell_count[1:]]
-        if len(rewards) == 0:
-            return [0.0, 0.0]
         return rewards
