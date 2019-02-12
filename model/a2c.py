@@ -6,7 +6,7 @@ GAMMA = 0.8
 
 
 class ActorCritic(nn.Module):
-    def __init__(self, n_inputs, n_actions):
+    def __init__(self, n_inputs, n_actions, gpu=torch.cuda.is_available()):
         super().__init__()
         self.n_inputs = n_inputs
         self.n_actions = n_actions
@@ -16,6 +16,8 @@ class ActorCritic(nn.Module):
 
         self.actor = nn.Linear(64, n_inputs)
         self.critic = nn.Linear(64, 1)
+
+        self.device = 'cuda' if gpu else 'cpu'
 
     # In a PyTorch model, you only have to define the forward pass. PyTorch computes the backwards pass for you!
     def forward(self, x):
@@ -58,7 +60,7 @@ class ActorCritic(nn.Module):
         # If not terminal state, bootstrap v(s) using our critic
         # TODO: don't need to estimate again, just take from last value of v(s) estimates
         else:
-            s = torch.from_numpy(states[-1]).float().unsqueeze(0)
+            s = torch.from_numpy(states[-1]).float().unsqueeze(0).to(self.device)
             next_return = self.get_state_value(s).data[0][0]
 
         # Backup from last state to calculate "true" returns for each state in the set
@@ -73,19 +75,18 @@ class ActorCritic(nn.Module):
             next_return = this_return
 
         R.reverse()
-        state_values_true = torch.FloatTensor(R).unsqueeze(1)
+        state_values_true = torch.FloatTensor(R).unsqueeze(1).to(self.device)
 
         return state_values_true
 
     def reflect(self, states, actions, rewards, dones):
-
         # Calculating the ground truth "labels" as described above
         state_values_true = self.calc_actual_state_values(rewards, dones, states)
 
-        s = torch.FloatTensor(states)
+        s = torch.FloatTensor(states).to(self.device)
         action_probs, state_values_est = self.evaluate_actions(s)
         action_log_probs = action_probs.log()
-        a = torch.LongTensor(actions).view(-1, self.n_actions)
+        a = torch.LongTensor(actions).view(-1, self.n_actions).to(self.device)
         chosen_action_log_probs = action_log_probs.gather(1, a)
 
         # This is also the TD error
