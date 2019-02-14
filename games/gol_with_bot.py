@@ -40,10 +40,7 @@ class GameOfLife():
         self.player1 = player1
         self.player2 = player2
         self.canvas.bind("<Button-1>", self.human_step)
-        #self.canvas.bind("<Button-2>", player2.step)
-        # self.canvas.bind('<Key>', self.step)
         self.canvas.bind_all('<space>', self.round)
-        # self.canvas.bind("<Button-3>", self.step)
         self.root.update()
         self.root.mainloop()
 
@@ -55,7 +52,6 @@ class GameOfLife():
         new_grid_state = np.vectorize(merge_perceptions)(self.env.get_grid(), all_moves)
         self.env.insert_block(new_grid_state, 0, 0)
         self.render()
-        sleep(3)
         for i in range(N_STEPS):
             sleep(0.1)
             self.step(None)
