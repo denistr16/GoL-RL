@@ -24,9 +24,7 @@ class GameOfLife():
 
         self.canvas.bind("<Button-1>", self.click_player_one)
         self.canvas.bind("<Button-2>", self.click_player_two)
-        # self.canvas.bind('<Key>', self.step)
         self.canvas.bind_all('<Key>', self.step)
-        # self.canvas.bind("<Button-3>", self.step)
         self.root.update()
         self.root.mainloop()
 

@@ -9,7 +9,7 @@ def flatten_grid(grid):
 
 
 class BotPlayer:
-    def __init__(self, env, model_path=None):
+    def __init__(self, env, model_path=None, marker=2, max_points_per_step=15):
 
         self.env = env.get_grid()
         self.model = ActorCritic(self.env.shape[0] * self.env.shape[1],
@@ -18,8 +18,8 @@ class BotPlayer:
             snapshot = torch.load(model_path)
             self.model.load_state_dict(snapshot)
 
-        self.marker = 2
-        self.max_points_per_step = 15
+        self.marker = marker
+        self.max_points_per_step = max_points_per_step
 
     def probs_to_cells(self, probs, env, topk=3, player=1):
         probs_top_k, idx_top_k = probs.topk(topk)
