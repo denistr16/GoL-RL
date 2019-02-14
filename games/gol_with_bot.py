@@ -23,11 +23,8 @@ def merge_agents(first_values,second_values):
 def merge_perceptions(old, new):
     return new if old == 0 else old
 
-
-N_STEPS = 10
-
 class GameOfLife():
-    def __init__(self, env, player1, player2):
+    def __init__(self, env, player1, player2, steps_after_action=10):
         self.root = Tkinter.Tk()
         self.frame = Tkinter.Frame(self.root, width=W, height=H)
         self.frame.pack()
@@ -39,6 +36,7 @@ class GameOfLife():
 
         self.player1 = player1
         self.player2 = player2
+        self.steps_after_action = steps_after_action
         self.canvas.bind("<Button-1>", self.human_step)
         self.canvas.bind_all('<space>', self.round)
         self.root.update()
@@ -52,7 +50,7 @@ class GameOfLife():
         new_grid_state = np.vectorize(merge_perceptions)(self.env.get_grid(), all_moves)
         self.env.insert_block(new_grid_state, 0, 0)
         self.render()
-        for i in range(N_STEPS):
+        for i in range(self.steps_after_action):
             sleep(0.1)
             self.step(None)
         print (self.env.get_grid())

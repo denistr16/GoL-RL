@@ -1,9 +1,8 @@
 from env.env_2players_naive_torus import players_cells_values, dead_cell
 
-
-H, W = 1000, 1000
-
-def get_cell_id(x, y, grid):
+## H, W - for height and width of game window area.
+## Not number of cells, but image size in pixels.
+def get_cell_id(x, y, grid, H=1000, W=1000):
     return int(x / (H / grid.shape[0])), int(y / (W / grid.shape[1]))
 
 class HumanPlayer:
