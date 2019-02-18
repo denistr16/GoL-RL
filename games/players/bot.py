@@ -11,10 +11,11 @@ class BotPlayer:
     def __init__(self, env, model_path=None, marker=2, max_points_per_step=15, perception_field_size=(5, 5)):
 
         self.env = np.zeros(env.get_grid().shape)
+        self.grid_size = self.env.shape
         self.perception_field_size = perception_field_size
 
         self.model = ActorCritic(self.env.shape[0] * self.env.shape[1],
-                                 self.perception_field_size[0]**2)
+                                 self.perception_field_size[0]**2+2)
 
         if model_path is not None:
             snapshot = torch.load(model_path)
@@ -30,18 +31,24 @@ class BotPlayer:
         self.env *= 0
 
     def probs_to_cells(self, probs, topk=3, marker=2):
-        print (probs)
         probs_top_k, idx_top_k = probs.topk(topk)
         inserted_block = np.zeros(self.perception_field_size)
         inserted_block = inserted_block.flatten()
         inserted_block[idx_top_k] = marker
         return inserted_block.reshape(self.perception_field_size)
 
+    def convert_coordinates(self,x , y):
+        x, y = torch.round(x * (self.grid_size[0] - self.perception_field_size[0])), torch.round(
+            y * (self.grid_size[0] - self.perception_field_size[0]))
+        return x.detach().int(), y.detach().int()
+
     def step(self, env):
         self.reset()
         x, y = 0, 0
-        probs = self.model.get_action_probs(flatten_grid(env))
-        perception_field = self.probs_to_cells(probs=probs.detach(),
+        probs = self.model.get_action_probs(flatten_grid(env)).detach()
+        perception_field, x, y = probs[:-2], probs[-1], probs[-2]
+        x, y = self.convert_coordinates(x, y)
+        perception_field = self.probs_to_cells(probs=perception_field,
                                             topk=self.max_points_per_step,
                                             marker=self.marker)
         self.insert_block(perception_field, x, y)

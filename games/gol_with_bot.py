@@ -50,6 +50,7 @@ class GameOfLife():
         new_grid_state = np.vectorize(merge_perceptions)(self.env.get_grid(), all_moves)
         self.env.insert_block(new_grid_state, 0, 0)
         self.render()
+        sleep(2)
         for i in range(self.steps_after_action):
            self.step(None)
         self.player1.reset(self.env)
@@ -66,7 +67,7 @@ class GameOfLife():
             elif x == players_cells_values['player_1']:
                 return 255
             else:
-                return players_cells_values['player2']
+                return 125
         return np.vectorize(to_colors)(grid)
 
     def step(self, event):
