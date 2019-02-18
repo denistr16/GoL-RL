@@ -44,7 +44,6 @@ class BotPlayer:
 
     def step(self, env):
         self.reset()
-        x, y = 0, 0
         probs = self.model.get_action_probs(flatten_grid(env)).detach()
         perception_field, x, y = probs[:-2], probs[-1], probs[-2]
         x, y = self.convert_coordinates(x, y)
