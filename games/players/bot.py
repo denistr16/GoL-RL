@@ -44,8 +44,8 @@ class BotPlayer:
 
     def step(self, env):
         self.reset()
-        probs = self.model.get_action_probs(flatten_grid(env)).detach()
-        perception_field, x, y = probs[:-2], probs[-1], probs[-2]
+        actions = self.model.get_action_probs(flatten_grid(env)).detach()
+        perception_field, x, y = actions[:-2], actions[-1], actions[-2]
         x, y = self.convert_coordinates(x, y)
         perception_field = self.probs_to_cells(probs=perception_field,
                                             topk=self.max_points_per_step,
@@ -53,4 +53,13 @@ class BotPlayer:
         if self.hard_x_y is not None:
             x, y = self.hard_x_y
         self.insert_block(perception_field, x, y)
-        return self.env
+        return self.env, np.append(perception_field.flatten(), [x, y])
+
+    def reflect(self, *args):
+        return self.model.reflect(*args)
+
+    def parameters(self):
+        return self.model.parameters()
+
+    def state_dict(self):
+        return self.model.state_dict()
