@@ -45,15 +45,13 @@ class GameOfLife():
     def round(self, event):
         print ("Bot's Move")
         player1_moves = self.player1.grid
-        player2_moves = self.player2.step()
+        player2_moves = self.player2.step(self.env.get_grid())
         all_moves = np.vectorize(merge_agents)(player1_moves, player2_moves)
         new_grid_state = np.vectorize(merge_perceptions)(self.env.get_grid(), all_moves)
         self.env.insert_block(new_grid_state, 0, 0)
         self.render()
         for i in range(self.steps_after_action):
-            sleep(0.1)
-            self.step(None)
-        print (self.env.get_grid())
+           self.step(None)
         self.player1.reset(self.env)
         print ("Player's Move")
 
@@ -68,7 +66,7 @@ class GameOfLife():
             elif x == players_cells_values['player_1']:
                 return 255
             else:
-                return 125
+                return players_cells_values['player2']
         return np.vectorize(to_colors)(grid)
 
     def step(self, event):

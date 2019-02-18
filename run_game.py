@@ -8,7 +8,7 @@ env = NaiveSandbox((10, 10))
 
 
 if __name__ == "__main__":
-    bot = BotPlayer(env, model_path='/home/artem/Development/research/GoL-RL/snapshots/agent_90.pth')
+    bot = BotPlayer(env, perception_field_size=(2,2), max_points_per_step=4)
     human = HumanPlayer('artem', env)
 
     GameOfLife(env, human, bot, steps_after_action=20)
