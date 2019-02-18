@@ -8,12 +8,12 @@ def flatten_grid(grid):
 
 
 class BotPlayer:
-    def __init__(self, env, model_path=None, marker=2, max_points_per_step=15, perception_field_size=(5, 5)):
+    def __init__(self, env, model_path=None, marker=2, max_points_per_step=15, perception_field_size=(5, 5), hard_x_y=None):
 
         self.env = np.zeros(env.get_grid().shape)
         self.grid_size = self.env.shape
         self.perception_field_size = perception_field_size
-
+        self.hard_x_y = hard_x_y
         self.model = ActorCritic(self.env.shape[0] * self.env.shape[1],
                                  self.perception_field_size[0]**2+2)
 
@@ -50,5 +50,7 @@ class BotPlayer:
         perception_field = self.probs_to_cells(probs=perception_field,
                                             topk=self.max_points_per_step,
                                             marker=self.marker)
+        if self.hard_x_y is not None:
+            x, y = self.hard_x_y
         self.insert_block(perception_field, x, y)
         return self.env
