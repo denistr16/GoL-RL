@@ -14,8 +14,9 @@ class BotPlayer:
         self.grid_size = self.env.shape
         self.perception_field_size = perception_field_size
         self.hard_x_y = hard_x_y
+        additional_x_y = 0 if hard_x_y is not None else 2
         self.model = ActorCritic(self.env.shape[0] * self.env.shape[1],
-                                 self.perception_field_size[0]**2+2)
+                                 self.perception_field_size[0]**2+additional_x_y)
 
         if model_path is not None:
             snapshot = torch.load(model_path)
@@ -53,7 +54,8 @@ class BotPlayer:
         if self.hard_x_y is not None:
             x, y = self.hard_x_y
         self.insert_block(perception_field, x, y)
-        return self.env, np.append(perception_field.flatten(), [x, y])
+        actions_for_reflect = np.append(perception_field.flatten(), [x, y]) if self.hard_x_y is None else perception_field.flatten()
+        return self.env, actions_for_reflect
 
     def reflect(self, *args):
         return self.model.reflect(*args)
