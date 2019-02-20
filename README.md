@@ -45,6 +45,9 @@ Latest examples of usage:
 - Run environment: [Env](https://github.com/denistr16/GoL-RL/blob/master/envs_run_template_02.ipynb)
 - Run agent:  [Agent](https://github.com/denistr16/GoL-RL/blob/master/agent_run_template_04.ipynb)
 
+## Experiment analysis
+TBA
+
 ## How to commit
 We are small at the moment and don't have any special requirements.
 We will be appreciated if you get one of the issues and help us.

@@ -1,4 +1,4 @@
-from env.env_2players_naive_torus import players_cells_values, dead_cell
+from src.env.env_2players_naive_torus import dead_cell
 
 ## H, W - for height and width of game window area.
 ## Not number of cells, but image size in pixels.

@@ -1,4 +1,3 @@
-from reward.rewards import *
 from .interface_env import IEnv
 
 template_rewards = {

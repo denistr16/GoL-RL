@@ -1,8 +1,8 @@
-from env.env_2players_naive_torus import NaiveSandbox
-from games.gol_with_bot import GameOfLife
+from src.env.env_2players_naive_torus import NaiveSandbox
+from src.games import GameOfLife
 
-from games.players.bot import BotPlayer
-from games.players.human import HumanPlayer
+from src.games.players import BotPlayer
+from src.games.players import HumanPlayer
 
 env = NaiveSandbox((20, 20))
 
