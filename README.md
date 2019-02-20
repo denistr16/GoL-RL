@@ -29,7 +29,7 @@ L1 distance between the amount of living cells and all the field cells:
 
 ##### Model
 There are three models:
-- Random: [soon :)]()
+- Random: [random](https://github.com/denistr16/GoL-RL/blob/master/model/random_model.py)
 - Linear: [linear_observer_planter](https://github.com/denistr16/GoL-RL/blob/master/model/linear_observer_planter.py)
 - Actor-Critic model: [a2c](https://github.com/denistr16/GoL-RL/blob/master/model/a2c.py)
 
