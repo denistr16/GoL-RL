@@ -14,7 +14,7 @@ class ActorCritic(nn.Module):
         self.linear2 = nn.Linear(64, 128)
         self.linear3 = nn.Linear(128, 64)
 
-        self.actor = nn.Linear(64, n_inputs)
+        self.actor = nn.Linear(64, n_actions)
         self.critic = nn.Linear(64, 1)
 
         self.device = 'cuda' if gpu else 'cpu'

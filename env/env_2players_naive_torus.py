@@ -108,9 +108,13 @@ class NaiveSandbox(IEnv):
                 break
 
         reward_value = reward_fn(self.__grid)
-        env_state = {"reward": reward_value, "grid": self.__grid, 'done': is_done}
+        # env_state = {"reward": reward_value, "grid": self.__grid, 'done': is_done}
+        env_state = {"reward": reward_value, "grid": self.__grid.astype(float), 'done': is_done}
 
         return env_state
 
-    def get_grid(self):
-        return self.__grid
+    def get_grid(self, grid_type=float):
+        if grid_type is not np.dtype(np.int8):
+            return self.__grid.astype(grid_type)
+        else:
+            return self.__grid

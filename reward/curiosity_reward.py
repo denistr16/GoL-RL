@@ -11,11 +11,10 @@ class Flatten(nn.Module):
         return input.view(input.size(0), -1)
 
 class RNDModel(nn.Module):
-    def __init__(self, input_size, output_size):
+    def __init__(self, input_size):
         super(RNDModel, self).__init__()
 
-        self.input_size = input_size
-        self.output_size = output_size
+        self.input_size = input_size - 9
 
         self.predictor = nn.Sequential(
             nn.Conv2d(in_channels=1,out_channels=32,kernel_size=8),
@@ -23,7 +22,7 @@ class RNDModel(nn.Module):
             nn.Conv2d(in_channels=32,out_channels=64,kernel_size=3),
             nn.LeakyReLU(),
             Flatten(),
-            nn.Linear(64, 512),
+            nn.Linear(64*self.input_size*self.input_size, 512),
         )
 
         self.target = nn.Sequential(
@@ -32,7 +31,7 @@ class RNDModel(nn.Module):
             nn.Conv2d(in_channels=32,out_channels=64,kernel_size=3),
             nn.LeakyReLU(),
             Flatten(),
-            nn.Linear(64, 512)
+            nn.Linear(64*self.input_size*self.input_size, 512),
         )
 
         for p in self.modules():
