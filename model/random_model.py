@@ -1,5 +1,5 @@
-import numpy as np
 import torch
+
 
 class RandomAgent:
     def __init__(self, input_size, output_size):
