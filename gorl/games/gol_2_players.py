@@ -1,7 +1,7 @@
 import tkinter as Tkinter
 from PIL import Image, ImageTk
 import numpy as np
-from src.env.env_2players_naive_torus import players_cells_values, dead_cell
+from gorl.env.env_2players_naive_torus import players_cells_values, dead_cell
 
 
 H, W = 1000, 1000
