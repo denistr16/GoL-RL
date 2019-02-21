@@ -1,6 +1,7 @@
 import numpy as np
 
 from .interface_env import IEnv
+from gorl.reward.rewards import AliveCellsReward
 
 template_rewards = {
     "alive_cells": AliveCellsReward()

@@ -1,6 +1,6 @@
 import torch
 import numpy as np
-from src.model import ActorCritic
+from gorl.model.a2c import ActorCritic
 
 
 def flatten_grid(grid):

@@ -2,7 +2,7 @@ import tkinter as Tkinter
 from PIL import Image, ImageTk
 import numpy as np
 from time import sleep
-from src.env.env_2players_naive_torus import players_cells_values
+from gorl.env.env_2players_naive_torus import players_cells_values
 
 """
 ### RULES ###
