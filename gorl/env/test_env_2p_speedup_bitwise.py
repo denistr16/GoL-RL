@@ -36,7 +36,7 @@ class Animate(object):
             else:
                 self.im.set_data(self.world.data)
 
-            print('w_step')
+            # print('w_step')
             self.world.step += 1
             self.world._engine.next_state()
             plt.pause(0.01)
@@ -98,6 +98,7 @@ class Engine(object):
         w1 = w & 1
         w2 = w & 2
         w2 = w2 >> 1
+
 
         w1 &= (((n == 2) | (n == 3)) & (n2 <= 3))
         w2 &= ((n <= 3) & ((n2 == 2) | (n2 == 3)))

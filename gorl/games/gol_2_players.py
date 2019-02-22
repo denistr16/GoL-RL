@@ -36,7 +36,6 @@ class GameOfLife():
                 return 255
             else:
                 return 125
-
         return np.vectorize(to_colors)(grid)
 
     def step(self, event):
@@ -54,11 +53,11 @@ class GameOfLife():
     def click_player_one(self, event):
         grid = self.env.get_grid()
         y, x = get_cell_id(event.x, event.y, grid)
-
         if grid[x][y] == players_cells_values['player_1']:
             grid[x][y] = dead_cell
         elif grid[x][y] == dead_cell:
             grid[x][y] = players_cells_values['player_1']
+        self.env.insert_block(grid, 0, 0)
         self.draw_matrix()
 
     def click_player_two(self, event):
@@ -69,4 +68,5 @@ class GameOfLife():
             grid[x][y] = dead_cell
         elif grid[x][y] == dead_cell:
             grid[x][y] = players_cells_values['player_2']
+        self.env.insert_block(grid, 0, 0)
         self.draw_matrix()
